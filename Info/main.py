@@ -23,5 +23,5 @@ Options: n = nano, s = small, m = medium, v = large, x = xlarge
 5. yolov8-cls = Classification = Labels an entire image with a single class (not object detection) --> cat, dog, etc
 """
 
-results = model(r"C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Project1\Images\1.png", show=True) #Show=True see the image
-cv2.waitKey(0) #0 means unless the user inputs, do not do anything
+# results = model(r"C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Info\Images\1.png", show=True) #Show=True see the image
+# cv2.waitKey(0) #0 means unless the user inputs, do not do anything
