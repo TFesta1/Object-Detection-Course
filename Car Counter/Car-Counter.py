@@ -7,7 +7,7 @@ from sort import *
 
 model = YOLO('../Yolo-Weights/yolov8n.pt')
 
-mask = cv2.imread(r'C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Project1\Images\CarMask.png')
+mask = cv2.imread(r'C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Info\Images\CarMask.png')
 
 #Tracking
 #max_age (Ex: If ID#1 is lost, how many frames do we wait to detect it back)
@@ -44,7 +44,7 @@ def vidDimensions(vidPath):
 
 
 current_dir = os.getcwd() # Get the current working directory
-carVideo = r'C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Project1\Videos\cars.mp4'
+carVideo = r'C:\Users\ringk\OneDrive\Documents\Object-Detection-Course\Info\Videos\cars.mp4'
 cap = cv2.VideoCapture(carVideo)
 vidDimensions(carVideo)
 
