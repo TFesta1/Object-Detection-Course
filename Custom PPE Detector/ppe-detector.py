@@ -24,11 +24,11 @@ classNames = [
     "vehicle",
   ]
 
-cap = cv2.VideoCapture(0) #0 is the webcam, 1 is for multiple webcams
+# cap = cv2.VideoCapture(0) #0 is the webcam, 1 is for multiple webcams
 # cap.set(3, 640) #Width, which is prop #3 Could also be 640 by 480, or 1280 by 720, just pick one
 # cap.set(4, 480) #Height
 
-# cap = cv2.VideoCapture(fr'{current_dir}\Info\Videos\ppe-2-1.mp4')
+cap = cv2.VideoCapture(fr'{current_dir}\Info\Videos\ppe-2-1.mp4')
 
 
 myColor = (0, 0, 255)
