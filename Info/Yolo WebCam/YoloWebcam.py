@@ -14,13 +14,14 @@ classNames = model.names #Dict to list
 # cap.set(4, 480) #Height
 
 current_dir = os.getcwd() # Get the current working directory
-cap = cv2.VideoCapture(fr'{current_dir}\Project1\Videos\people.mp4')
+cap = cv2.VideoCapture(fr'{current_dir}\Info\Videos\people.mp4')
 
 
 
 while True:
     success, img = cap.read()
     if not success: #If cap is undefined, then we just break it immediately so we do not crash
+        print("Video Ended")
         break
     results = model(img, stream=True) #Stream=True uses generators, which is faster. It is recommended to set this to true.
     

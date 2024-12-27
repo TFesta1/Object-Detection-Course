@@ -1,0 +1,89 @@
+#Get best.pt file within the weights and use it
+from ultralytics import YOLO
+import cv2 
+import cvzone #Displays detections, not required
+import math
+import os
+
+current_dir = os.getcwd() # Get the current working directory
+
+
+model = YOLO(fr'{current_dir}\Custom PPE Detector\best.pt')
+
+# classNames = model.names #Dict to list
+classNames = [
+    "Hardhat",
+    "Mask",
+    "NO-Hardhat",
+    "NO-Mask",
+    "NO-Safety Vest",
+    "Person",
+    "Safety Cone",
+    "Safety Vest",
+    "machinery",
+    "vehicle",
+  ]
+
+cap = cv2.VideoCapture(0) #0 is the webcam, 1 is for multiple webcams
+# cap.set(3, 640) #Width, which is prop #3 Could also be 640 by 480, or 1280 by 720, just pick one
+# cap.set(4, 480) #Height
+
+# cap = cv2.VideoCapture(fr'{current_dir}\Info\Videos\ppe-2-1.mp4')
+
+
+myColor = (0, 0, 255)
+while True:
+    success, img = cap.read()
+    if not success: #If cap is undefined, then we just break it immediately so we do not crash
+        print("Video Ended")
+        break
+    results = model(img, stream=True) #Stream=True uses generators, which is faster. It is recommended to set this to true.
+    
+    #Bounding boxes 
+    for r in results:
+        boxes = r.boxes
+        for box in boxes:
+            # OPENCV --> Bounding Box
+            x1, y1, x2, y2 = box.xyxy[0] #Easier to input into opencv
+            x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+            # cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 255), 3) # (x1, y1) = top left, (x2, y2) = bottom right, (255, 0, 255) = color, 3 = thickness
+
+            # CVZONE --> Bounding Box
+            w, h = x2-x1, y2-y1
+            # cvzone.cornerRect(img, (x1, y1, w, h)) #Fancy rectangle, bounding box
+            # Confidence
+            conf = box.conf[0]
+            conf = math.ceil((box.conf[0]*100))/100 #2 decimal places rounding
+        
+            # ClassName
+            cls = box.cls[0] #The ID of the class
+            
+            if conf > 0.5:
+                currentClass = classNames[int(cls)]
+                if currentClass == 'Hardhat' or currentClass == 'Safety Vest' or currentClass == 'Mask':
+                    myColor = (0, 255, 0) #Green
+                else:
+                    myColor = (0, 0, 255) #Red
+
+                cv2.rectangle(img, (x1, y1), (x2, y2), myColor, 3)
+
+                
+                # max(0,x1) means it will not go above 0, so it will stay within the image
+                # scale makes the text smaller
+                # default thickness is 3, we make it smaller so we can still read
+                cvzone.putTextRect(img, f'{classNames[int(cls)]} {conf}', (max(0,x1), max(35,y1)), scale=1, thickness=1, colorB=myColor, colorT=(255, 255, 255), colorR=myColor, offset=5)
+                
+            
+    cv2.imshow("Image", img)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'): #If q is pressed, break the loop
+        break
+
+    # cv2.waitKey(1) #1ms delay
+
+# Release the webcam and close windows
+cap.release()
+cv2.destroyAllWindows()
+
+
+
